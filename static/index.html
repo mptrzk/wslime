@@ -1,1 +1,5 @@
-hello
+<script>
+  const s = new WebSocket('ws://localhost:8001');
+  s.onmessage = e => console.log(e.data);
+</script>
+

@@ -1,34 +1,29 @@
-#imports
 import threading
-import asyncio
-from websockets.server import serve
-
+from websockets.sync import server
+import json
 
 
 buf = ''
 
 #yeet
-def yeet():
+def yeet(websocket):
   global buf
-  print(buf) 
+  websocket.send(buf) 
   buf = ''
 
-yt = None
-while True:
-  inp = input()
-  buf += inp + '\n'
-  if yt:
-    yt.cancel()
-  yt = threading.Timer(0.01, yeet)
-  yt.start()
+def handler(websocket):
+  global buf
+  print('connected')
+  yt = None
+  while True:
+    inp = input()
+    buf += inp + '\n'
+    if yt:
+      yt.cancel()
+    yt = threading.Timer(0.01, lambda: yeet(websocket))
+    yt.start()
+    
 
-
-
-async def echo(websocket):
-  await websocket.send(message) #here
-
-async def main():
-  async with serve(echo, "localhost", 8001):
-    await asyncio.Future()  # run forever
-
-asyncio.run(main())
+with server.serve(handler, 'localhost', 8001) as server:
+  print('waiting for connection')
+  server.serve_forever()
