@@ -1,11 +1,12 @@
 import threading
 from websockets.sync import server
 import json
+from functools import partial
+from http.server import HTTPServer, SimpleHTTPRequestHandler
 
 
 buf = ''
 
-#yeet
 def yeet(websocket):
   global buf
   websocket.send(buf) 
@@ -14,7 +15,7 @@ def yeet(websocket):
 def handler(websocket):
   global buf
   print('connected')
-  yt = None
+  yt = None  #yeet timer
   while True:
     inp = input()
     buf += inp + '\n'
@@ -22,7 +23,12 @@ def handler(websocket):
       yt.cancel()
     yt = threading.Timer(0.01, lambda: yeet(websocket))
     yt.start()
-    
+
+def hserve():
+  h = partial(SimpleHTTPRequestHandler, directory='static')
+  HTTPServer(('localhost', 8000), h).serve_forever()
+
+threading.Timer(0, hserve).start()
 
 with server.serve(handler, 'localhost', 8001) as server:
   print('waiting for connection')

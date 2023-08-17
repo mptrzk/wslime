@@ -1,5 +1,5 @@
 <script>
   const s = new WebSocket('ws://localhost:8001');
-  s.onmessage = e => console.log(e.data);
+  s.onmessage = e => document.body.innerHTML += e.data + '\n';
 </script>
 
