@@ -24,12 +24,14 @@ def handler(websocket):
     yt = threading.Timer(0.01, lambda: yeet(websocket))
     yt.start()
 
-def hserve():
-  h = partial(SimpleHTTPRequestHandler, directory='static')
-  HTTPServer(('localhost', 8000), h).serve_forever()
+def wserve():
+  global server
+  with server.serve(handler, 'localhost', 8001) as server:
+    print('waiting for connection')
+    server.serve_forever()
 
-threading.Timer(0, hserve).start()
+threading.Thread(target=wserve, daemon=True).start()
 
-with server.serve(handler, 'localhost', 8001) as server:
-  print('waiting for connection')
-  server.serve_forever()
+h = partial(SimpleHTTPRequestHandler, directory='static')
+HTTPServer(('localhost', 8000), h).serve_forever()
+
