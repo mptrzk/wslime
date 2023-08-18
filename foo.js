@@ -1,8 +1,8 @@
 document.body.innerHTML = '';
 
 function foo() {
-  const bar = [1, 2, 3];
-  document.body.innerHTML += bar + '<br>';
+  const bar = [1, 2, 3].map(x => x + ' Missisipi');
+  document.body.innerHTML += bar.join(', ') + '<br>';
   return bar;
 }
 foo();

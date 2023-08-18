@@ -1,14 +1,13 @@
-waiting for connection
 <script>
-  indent = s => s.split('\n').map(x => '  ' + x).join('\n');
+  console.log('waiting for wslime connection');
   const ws = new WebSocket('ws://localhost:8001');
+  ws.onopen = () => console.log('wslime connected');
+  ws.onclose = () => console.log('wslime disconnected');
+  indent = s => s.split('\n').map(x => '  ' + x).join('\n');
   ws.onmessage = e => {
     let msg = indent(e.data);
     msg = '>' + msg.slice(1);
-    console.log(msg);
-    console.log(eval?.(e.data));
+    console.log(msg, eval?.(e.data));
   }
-  ws.onopen = () => document.body.innerText = 'connected';
-  ws.onclose = () => document.body.innerText = 'disconnected';
 </script>
 
