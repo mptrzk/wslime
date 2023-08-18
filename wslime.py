@@ -9,6 +9,8 @@ buf = ''
 
 def yeet(websocket):
   global buf
+  print('sending:')
+  print(buf, end='')
   websocket.send(buf) 
   buf = ''
 
