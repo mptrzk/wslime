@@ -1,3 +1,4 @@
+import os
 import threading
 import queue
 from websockets.sync import server
@@ -6,7 +7,9 @@ from http.server import HTTPServer, SimpleHTTPRequestHandler
 
 
 def hserve():
-  h = partial(SimpleHTTPRequestHandler, directory='static')
+  d = f'{os.path.dirname(__file__)}/static'
+  print(d)
+  h = partial(SimpleHTTPRequestHandler, directory=d)
   HTTPServer(('localhost', 8000), h).serve_forever()
 threading.Thread(target=hserve, daemon=True).start()
 
