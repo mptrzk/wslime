@@ -1,28 +1,25 @@
 import os
 import threading
-import queue
-from websockets.sync import server
+from queue import Queue
 from functools import partial
+from websockets.sync import server
 from http.server import HTTPServer, SimpleHTTPRequestHandler
-
 
 def hserve():
   d = os.path.dirname(__file__)
+  print(d)
   h = partial(SimpleHTTPRequestHandler, directory=d)
   HTTPServer(('localhost', 8000), h).serve_forever()
 threading.Thread(target=hserve, daemon=True).start()
 
+q = Queue()
 
-q = queue.Queue()
-
-def handler(websocket):
+def handler(ws):
   print('connected')
   while True:
     try:
       msg = q.get()
-      print('sending:')
-      print(msg, end='')
-      websocket.send(msg)
+      ws.send(msg)
     except:
       print('disconnected')
       q.put(msg)
@@ -35,19 +32,5 @@ def wserve():
     server.serve_forever()
 threading.Thread(target=wserve, daemon=True).start()
 
-
-buf = ''
-
-def yeet():
-  global buf
-  q.put(buf)
-  buf = ''
-
-yt = None  #yeet timer
 while True:
-  inp = input()
-  buf += inp + '\n'
-  if yt:
-    yt.cancel()
-  yt = threading.Timer(0.01, yeet)
-  yt.start()
+  q.put(input())

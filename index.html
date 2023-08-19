@@ -1,0 +1,30 @@
+<script>
+  const wslime = {
+    fresh: true,
+    whole: false,
+    bufStart: function() {
+      this.whole = true;
+    },
+    bufEnd: function() {
+      this.fresh = false;
+      this.whole = false;
+      return 'wslime: buffer evaluated';
+    }
+  };
+
+  console.log('waiting for wslime connection');
+  const ws = new WebSocket('ws://localhost:8001');
+  ws.onopen = () => console.log('wslime connected');
+  ws.onclose = () => console.log('wslime disconnected');
+  indent = s => s.split('\n').map(x => '  ' + x).join('\n');
+
+
+  ws.onmessage = e => {
+    let msg = indent(e.data.trim());
+    msg = '>' + msg.slice(1);
+    console.log(msg)
+    let val = eval.apply(window, [e.data]);
+    console.log(val)
+  }
+</script>
+
