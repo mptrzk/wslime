@@ -8,7 +8,13 @@
     bufEnd: function() {
       this.fresh = false;
       this.whole = false;
-      return 'wslime: buffer evaluated';
+      console.log('wslime: buffer evaluated');
+    },
+    init: function(cb) {
+      if (this.fresh || !this.whole) {
+        cb();
+        console.log('wslime: state initialized');
+      }
     }
   };
 
