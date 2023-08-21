@@ -1,4 +1,9 @@
 //;i - init
+
+import * as wslime from './wslime';
+
+let keepsies;
+
 wslime.init(() => {
   keepsies = 0;
 });
@@ -28,5 +33,4 @@ foo();
 
 console.log('keepsies:', keepsies++);
 
-wslime.bufEnd();
 
