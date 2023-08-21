@@ -1,15 +1,25 @@
 import os
 import threading
 import queue
+from bottle import run, route, static_file
 from websockets.sync import server
-from functools import partial
-from http.server import HTTPServer, SimpleHTTPRequestHandler
 
+
+
+@route('/')
+def serve_index():
+  return static_file('index.html', os.getcwd())
+
+@route('/<filename:path>')
+def serve_cwd(filename):
+  return static_file(filename, os.getcwd())
+
+@route('/wslime')
+def serve_wslime():
+  return static_file('wslime.js', os.path.dirname(__file__))
 
 def hserve():
-  d = os.path.dirname(__file__)
-  h = partial(SimpleHTTPRequestHandler, directory=d)
-  HTTPServer(('localhost', 8000), h).serve_forever()
+  run(host='localhost', port=8000, debug=True)
 threading.Thread(target=hserve, daemon=True).start()
 
 
