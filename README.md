@@ -3,16 +3,10 @@ tools similar to [vim-slime](https://github.com/jpalardy/vim-slime).
 
 [here be GIF]
 
-Future usage *(probably different)*:
+usage: 
 
-    wslime [options]
-    
-    options:
-    -p [port]
-    -s [server_middleware...]
-    -j [client_middleware...]
+    wslime [-p PORT]
 
-The middleware will allow you to use typescript,
 
 ### Why?
     
@@ -23,3 +17,8 @@ interactivity is fun
 Slime-like systems make it easy to wriet persistent commands,
 which are easy to re-evaluate
 
+original lisp slime and its vim ports
+
+jpalardy's slime evals blocks separated by empty lines,
+which is more crude, but I find it to be a feature more than a bug.
+It comes in handy when I redefine a function, because [TODO: reasons]
