@@ -1,6 +1,15 @@
 <script>
   const wslime = {
     fresh: true,
+    whole: false,
+    bufStart: function() {
+      this.whole = true;
+    },
+    bufEnd: function() {
+      this.fresh = false;
+      this.whole = false;
+      console.log('wslime: buffer evaluated');
+    },
     init: function(cb) {
       if (this.fresh || !this.whole) {
         cb();
