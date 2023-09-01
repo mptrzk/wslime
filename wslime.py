@@ -4,19 +4,20 @@ import queue
 from bottle import run, route, static_file
 from websockets.sync import server
 
-
+cwd = os.getcwd()
+script_dir = os.path.dirname(__file__)
 
 @route('/')
 def serve_index():
-  return static_file('index.html', os.getcwd())
+  return static_file('index.html', script_dir)
 
 @route('/<filename:path>')
 def serve_cwd(filename):
-  return static_file(filename, os.getcwd())
+  return static_file(filename, cwd) 
 
 @route('/wslime')
 def serve_wslime():
-  return static_file('wslime.js', os.path.dirname(__file__))
+  return static_file('wslime.js', script_dir)
 
 def hserve():
   run(host='localhost', port=8000, debug=True)
