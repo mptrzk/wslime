@@ -1,8 +1,23 @@
+import sys
 import os
 import threading
 import queue
+import argparse
 from websockets.sync import server
 from http.server import HTTPServer, SimpleHTTPRequestHandler
+
+dir = os.path.dirname(__file__)
+cwd = os.getcwd()
+
+ap = argparse.ArgumentParser()
+ap.add_argument('--init', nargs='?', const='default')
+args = ap.parse_args()
+
+if args.init:
+  os.system(f'cp -r {dir}/static/presets/{args.init}/* {cwd}')
+  os.system(f'cp {dir}/static/wslime-client.js {cwd}')
+  print('project initialized')
+  sys.exit(0)
 
 
 def hserve():
