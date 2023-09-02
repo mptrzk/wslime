@@ -8,7 +8,6 @@ from http.server import HTTPServer, SimpleHTTPRequestHandler
 
 
 
-cwd = os.getcwd()
 dir = os.path.dirname(__file__)
 preset_dir = f'{dir}/static/presets'
 client_name = 'wslime-client.js'
@@ -24,14 +23,11 @@ ag.add_argument('-s', '--save-preset', metavar='preset')
 ag.add_argument('-r', '--remove-preset', metavar='preset')
 ag.add_argument('-l', '--list-presets', action='store_true', default=False)
 
-ap.add_argument('--hport', type=int, default=8000) 
-ap.add_argument('--wport', type=int, default=8001) 
-
 args = ap.parse_args()
 
 
 def copy_client():
-  os.system(f'cp {dir}/static/{client_name} {cwd}')
+  os.system(f'cp {dir}/static/{client_name} .')
 
 if args.init:
   #check if is a project, yaynay
@@ -39,7 +35,7 @@ if args.init:
     print('directory already contains a wslime project')
   else:
     if args.init != 'minimal':
-      os.system(f'cp -r {preset_dir}/{args.init}/* {cwd}')
+      os.system(f'cp -r {preset_dir}/{args.init}/* .')
     copy_client()
     print('project initialized')
   exit(0)
@@ -74,9 +70,15 @@ if args.list_presets:
 
 
 
+with open('config.json') as f:
+  config = json.load(f)
+hport = int(config['http_port'])
+wport = int(config['ws_port'])
+
+
 def hserve():
   h = SimpleHTTPRequestHandler
-  HTTPServer(('localhost', args.hport), h).serve_forever()
+  HTTPServer(('localhost', hport), h).serve_forever()
 threading.Thread(target=hserve, daemon=True).start()
 
 
@@ -97,7 +99,7 @@ def handler(websocket):
 
 def wserve():
   global server
-  with server.serve(handler, 'localhost', args.wport) as server:
+  with server.serve(handler, 'localhost', wport) as server:
     print('waiting for connection')
     server.serve_forever()
 threading.Thread(target=wserve, daemon=True).start()
