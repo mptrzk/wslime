@@ -15,6 +15,8 @@ ap = argparse.ArgumentParser()
 ag = ap.add_mutually_exclusive_group()
 ag.add_argument('-i', '--init', nargs='?', const='default', metavar='preset')
 ag.add_argument('-s', '--save-preset', metavar='preset')
+ag.add_argument('-r', '--remove-preset', metavar='preset')
+ag.add_argument('-l', '--list-presets', action='store_true', default=False)
 args = ap.parse_args()
 
 if args.init:
@@ -30,6 +32,14 @@ if args.save_preset:
   print(f'preset saved at {p}')
   exit(0)
 
+if args.remove_preset:
+  p = f'{preset_dir}/{args.remove_preset}'
+  os.system(f'rm -r {p}')
+  exit(0)
+
+if args.list_presets: 
+  os.system(f'ls {preset_dir}') 
+  exit(0)
 
 
 def hserve():
