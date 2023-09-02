@@ -1,0 +1,5 @@
+{
+  "init": "src/init.js",
+  "http_port": "8000",
+  "ws_port": "8001"
+}
