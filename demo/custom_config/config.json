@@ -1,0 +1,6 @@
+{
+  "init": "src/main.js",
+  "http_port": "3000",
+  "ws_port": "3001",
+  "line_timeout": 50
+}

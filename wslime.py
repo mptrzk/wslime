@@ -40,6 +40,9 @@ if args.init:
     print('project initialized')
   exit(0)
 
+
+#TODO diff all static files, if no changes, print "client up to date"
+# also warn user if client version differs
 if args.update:
   if isproject:
     copy_static()
@@ -53,7 +56,8 @@ if args.save_preset:
   if isproject:
     p = f'{preset_dir}/{args.save_preset}'
     os.system(f'cp -r . {p}')
-    os.system(f'rm {p}/{client_name}')
+    os.system(f'rm {p}/{client_name}') #TODO remove all static files
+    os.system(f'rm {p}/index.html')
     print(f'preset saved at {p}')
   else:
     print('directory doesn\'t contain a wslime project')
@@ -65,7 +69,7 @@ if args.remove_preset:
   exit(0)
 
 if args.list_presets: 
-  os.system(f'ls {preset_dir}') 
+  os.system(f'ls {preset_dir}')
   exit(0)
 
 
@@ -74,6 +78,7 @@ with open('config.json') as f:
   config = json.load(f)
 hport = int(config['http_port'])
 wport = int(config['ws_port'])
+line_timeout = float(config['line_timeout']) / 1000
 
 
 def hserve():
@@ -118,5 +123,5 @@ while True:
   buf += inp + '\n'
   if yt:
     yt.cancel()
-  yt = threading.Timer(0.01, yeet)
+  yt = threading.Timer(line_timeout, yeet)
   yt.start()
