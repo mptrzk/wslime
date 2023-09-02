@@ -1,4 +1,3 @@
-import sys
 import os
 import threading
 import queue
@@ -6,18 +5,31 @@ import argparse
 from websockets.sync import server
 from http.server import HTTPServer, SimpleHTTPRequestHandler
 
+
 dir = os.path.dirname(__file__)
+preset_dir = f'{dir}/static/presets'
 cwd = os.getcwd()
+client_name = 'wslime-client.js'
 
 ap = argparse.ArgumentParser()
-ap.add_argument('--init', nargs='?', const='default')
+ag = ap.add_mutually_exclusive_group()
+ag.add_argument('-i', '--init', nargs='?', const='default', metavar='preset')
+ag.add_argument('-s', '--save-preset', metavar='preset')
 args = ap.parse_args()
 
 if args.init:
-  os.system(f'cp -r {dir}/static/presets/{args.init}/* {cwd}')
-  os.system(f'cp {dir}/static/wslime-client.js {cwd}')
+  os.system(f'cp -r {preset_dir}/{args.init}/* {cwd}')
+  os.system(f'cp {dir}/static/{client_name} {cwd}')
   print('project initialized')
-  sys.exit(0)
+  exit(0)
+
+if args.save_preset:
+  p = f'{preset_dir}/{args.save_preset}'
+  os.system(f'cp -r . {p}')
+  os.system(f'rm {p}/{client_name}')
+  print(f'preset saved at {p}')
+  exit(0)
+
 
 
 def hserve():
