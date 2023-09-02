@@ -6,11 +6,13 @@ from websockets.sync import server
 from http.server import HTTPServer, SimpleHTTPRequestHandler
 
 
+
+cwd = os.getcwd()
 dir = os.path.dirname(__file__)
 preset_dir = f'{dir}/static/presets'
-cwd = os.getcwd()
 client_name = 'wslime-client.js'
 isproject = os.path.isfile(client_name)
+
 
 ap = argparse.ArgumentParser()
 ag = ap.add_mutually_exclusive_group()
@@ -25,6 +27,7 @@ ap.add_argument('--hport', type=int, default=8000)
 ap.add_argument('--wport', type=int, default=8001) 
 
 args = ap.parse_args()
+
 
 def copy_client():
   os.system(f'cp {dir}/static/{client_name} {cwd}')
@@ -67,6 +70,7 @@ if args.remove_preset:
 if args.list_presets: 
   os.system(f'ls {preset_dir}') 
   exit(0)
+
 
 
 def hserve():
