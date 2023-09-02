@@ -7,7 +7,7 @@
 
   const config = (await (await fetch('config.json')).json())
 
-  const ws = new WebSocket(`ws://localhost:${config.ws_port ?? 8001}`)
+  const ws = new WebSocket(`ws://localhost:${config.ws_port}`)
 
 
   console.log('waiting for wslime connection');

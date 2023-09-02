@@ -9,9 +9,9 @@ from http.server import HTTPServer, SimpleHTTPRequestHandler
 
 
 dir = os.path.dirname(__file__)
-preset_dir = f'{dir}/static/presets'
-client_name = 'wslime-client.js'
-isproject = os.path.isfile(client_name)
+preset_dir = f'{dir}/presets'
+client_name = 'wslime.js'
+isproject = os.path.isfile(client_name) #proper predicate?
 
 
 ap = argparse.ArgumentParser()
@@ -26,8 +26,8 @@ ag.add_argument('-l', '--list-presets', action='store_true', default=False)
 args = ap.parse_args()
 
 
-def copy_client():
-  os.system(f'cp {dir}/static/{client_name} .')
+def copy_static():
+  os.system(f'cp {dir}/static/* .')
 
 if args.init:
   #check if is a project, yaynay
@@ -36,13 +36,13 @@ if args.init:
   else:
     if args.init != 'minimal':
       os.system(f'cp -r {preset_dir}/{args.init}/* .')
-    copy_client()
+    copy_static()
     print('project initialized')
   exit(0)
 
 if args.update:
   if isproject:
-    copy_client()
+    copy_static()
     print('client updated')
   else:
     print('directory doesn\'t contain a wslime project')
