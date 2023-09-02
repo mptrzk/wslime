@@ -17,6 +17,8 @@ ag.add_argument('-i', '--init', nargs='?', const='default', metavar='preset')
 ag.add_argument('-s', '--save-preset', metavar='preset')
 ag.add_argument('-r', '--remove-preset', metavar='preset')
 ag.add_argument('-l', '--list-presets', action='store_true', default=False)
+ap.add_argument('--hport', type=int, default=8000) 
+ap.add_argument('--wport', type=int, default=8001) 
 args = ap.parse_args()
 
 if args.init:
@@ -44,7 +46,7 @@ if args.list_presets:
 
 def hserve():
   h = SimpleHTTPRequestHandler
-  HTTPServer(('localhost', 8000), h).serve_forever()
+  HTTPServer(('localhost', args.hport), h).serve_forever()
 threading.Thread(target=hserve, daemon=True).start()
 
 
@@ -65,7 +67,7 @@ def handler(websocket):
 
 def wserve():
   global server
-  with server.serve(handler, 'localhost', 8001) as server:
+  with server.serve(handler, 'localhost', args.wport) as server:
     print('waiting for connection')
     server.serve_forever()
 threading.Thread(target=wserve, daemon=True).start()
