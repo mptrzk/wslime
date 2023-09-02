@@ -1,16 +1,18 @@
 wslime = {
+  attrib: s => document.querySelector('script').getAttribute(s),
   eval: async src => (async function (){}).constructor(src)(),
-  load: async url => wslime.eval(await (await fetch(url)).text())
+  load: async url => wslime.eval(await (await fetch(url)).text()),
 };
+wslime.ws = new WebSocket(`ws://localhost:${wslime.attrib('port') ?? 8001}`)
 
 
 console.log('waiting for wslime connection');
-const ws = new WebSocket('ws://localhost:8001');
-ws.onopen = () => console.log('wslime connected');
-ws.onclose = () => console.log('wslime disconnected');
+wslime.ws = 
+wslime.ws.onopen = () => console.log('wslime connected');
+wslime.ws.onclose = () => console.log('wslime disconnected');
 
 
-ws.onmessage = async e => {
+wslime.ws.onmessage = async e => {
   const indent = s => s.split('\n').map(x => '  ' + x).join('\n');
   let msg = indent(e.data.trim());
   msg = '>' + msg.slice(1);
@@ -20,5 +22,4 @@ ws.onmessage = async e => {
 }
 
 
-wslime.load(document.querySelector('script')
-            .getAttribute('init'));
+wslime.load(wslime.attrib('init'));
