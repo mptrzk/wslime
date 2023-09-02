@@ -10,28 +10,53 @@ dir = os.path.dirname(__file__)
 preset_dir = f'{dir}/static/presets'
 cwd = os.getcwd()
 client_name = 'wslime-client.js'
+isproject = os.path.isfile(client_name)
 
 ap = argparse.ArgumentParser()
 ag = ap.add_mutually_exclusive_group()
+
 ag.add_argument('-i', '--init', nargs='?', const='default', metavar='preset')
+ag.add_argument('-u', '--update', action='store_true', default=False)
 ag.add_argument('-s', '--save-preset', metavar='preset')
 ag.add_argument('-r', '--remove-preset', metavar='preset')
 ag.add_argument('-l', '--list-presets', action='store_true', default=False)
+
 ap.add_argument('--hport', type=int, default=8000) 
 ap.add_argument('--wport', type=int, default=8001) 
+
 args = ap.parse_args()
 
-if args.init:
-  os.system(f'cp -r {preset_dir}/{args.init}/* {cwd}')
+def copy_client():
   os.system(f'cp {dir}/static/{client_name} {cwd}')
-  print('project initialized')
+
+if args.init:
+  #check if is a project, yaynay
+  if isproject:
+    print('directory already contains a wslime project')
+  else:
+    if args.init != 'minimal':
+      os.system(f'cp -r {preset_dir}/{args.init}/* {cwd}')
+    copy_client()
+    print('project initialized')
   exit(0)
 
+if args.update:
+  if isproject:
+    copy_client()
+    print('client updated')
+  else:
+    print('directory doesn\'t contain a wslime project')
+  exit(0)
+  #check if is a project
+
 if args.save_preset:
-  p = f'{preset_dir}/{args.save_preset}'
-  os.system(f'cp -r . {p}')
-  os.system(f'rm {p}/{client_name}')
-  print(f'preset saved at {p}')
+  if isproject:
+    p = f'{preset_dir}/{args.save_preset}'
+    os.system(f'cp -r . {p}')
+    os.system(f'rm {p}/{client_name}')
+    print(f'preset saved at {p}')
+  else:
+    print('directory doesn\'t contain a wslime project')
   exit(0)
 
 if args.remove_preset:
