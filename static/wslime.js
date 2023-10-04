@@ -1,7 +1,8 @@
 (async () => {
 
   top.wslime = {
-    eval: async src => (async function (){}).constructor(src)(),
+    eval: async src => (async () => {}).constructor(src)(),
+    after: () => {},
     load: async url => wslime.eval(await (await fetch(url)).text()),
   };
 
@@ -19,9 +20,9 @@
     const indent = s => s.split('\n').map(x => '  ' + x).join('\n');
     let msg = indent(e.data.trim());
     msg = '>' + msg.slice(1);
-    console.log(msg)
+    console.log(msg);
     let val = await wslime.eval(e.data);
-    console.log(val)
+    wslime.after();
   }
 
 
