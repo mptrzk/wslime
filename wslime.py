@@ -80,10 +80,14 @@ hport = int(config['http_port'])
 wport = int(config['ws_port'])
 line_timeout = float(config['line_timeout']) / 1000
 
+class H(SimpleHTTPRequestHandler):
+  def end_headers(self):
+    self.send_header('Access-Control-Allow-Origin', '*')
+    #super().end_headers(self) TODO why doesn't it work?
+    SimpleHTTPRequestHandler.end_headers(self)
 
 def hserve():
-  h = SimpleHTTPRequestHandler
-  HTTPServer(('localhost', hport), h).serve_forever()
+  HTTPServer(('localhost', hport), H).serve_forever()
 threading.Thread(target=hserve, daemon=True).start()
 
 
